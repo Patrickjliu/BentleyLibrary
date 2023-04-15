@@ -130,5 +130,5 @@ def main():
     if exit_choice == "y":
         break
 
-
-main()
+login()
+main() 
