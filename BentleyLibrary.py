@@ -68,7 +68,7 @@ def login():
   validyn(email, emailPrompt)
   
   os.system("clear")
-name = "Patrick"
+
 def main():
     
   print(f"Welcome {name}!")
@@ -131,4 +131,4 @@ def main():
         break
 
 login()
-main() 
+main()
