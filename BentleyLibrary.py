@@ -1,10 +1,41 @@
 import requests
 from datetime import datetime
+import mysql.connector
 import os
+from dotenv import load_dotenv
+
+load_dotenv()
+
+#Credentials
+
+#test
+host = os.environ.get('DB_HOST')
+
+if host is None:
+    print("Environment variable 'host' is not set.")
+else:
+    print("Environment variable 'host' is set to:", host)
+
+mydb = mysql.connector.connect(
+  host=os.getenv('DB_HOST'),
+  user=os.getenv('DB_USER'),
+  password=os.getenv('DB_PASSWORD'),
+  database=os.getenv('DB_NAME'),
+)
+
 name = ""
 lastname = ""
 email = ""
 checkoutPeriod = 14
+
+# Create a cursor object
+cursor = mydb.cursor()
+
+# Prepare the SQL query to insert data
+mycursor = mydb.cursor()
+
+# Insert data into the table
+sql = "INSERT INTO new_table (Title, Author, Publication_Date, ISBN, User_First_Name, User_Last_Name, User_Email, User_Grad_Year, Number_of_Current_Book_Checked_Out, Due_Date) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
 
 def getTitle(ISBN):
   response = requests.get(f"https://www.googleapis.com/books/v1/volumes?q=isbn:{ISBN}")
@@ -96,6 +127,9 @@ def main():
         except:
           print("Invalid ISBN. ")
           ISBN = input("Please enter the ISBN. ")
+
+      #example
+      val = ("The Great Gatsby", "F. Scott Fitzgerald", "1925-04-10", 9780684830421, "John", "Doe", "johndoe@gmail.com", 2023, 1, "2023-05-01")
           
       # check_in_out = {"name": name, "ISBN": ISBN, "check-in": current_time}
       # db[name] = check_in_out
@@ -116,10 +150,7 @@ def main():
             print("Invalid ISBN. ")
             ISBN = input("Please enter the ISBN. ")
             
-        # check_in_out = {"name": name, "ISBN": ISBN, "check-out": current_time}
-        # db[name] = check_in_out
-        # print(db[name])
-        # print(f"{name} has checked out {getTitle(ISBN)} at {current_time}")
+        val = ("The Great Gatsby", "F. Scott Fitzgerald", "1925-04-10", 9780684830421, "John", "Doe", "johndoe@gmail.com", 2023, 1, "2023-05-01")
 
     # If the user enters an invalid action, prompt them to try again
     else:
@@ -132,3 +163,23 @@ def main():
 
 login()
 main()
+
+mycursor.execute(sql, val)
+
+# Commit the changes to the database
+mydb.commit()
+
+# Close the connection
+print(mycursor.rowcount, "record inserted.")
+mydb.close()
+
+def printall():
+  # Execute the SELECT query
+  mycursor.execute("SELECT * FROM new_table")
+
+  # Fetch all rows from the result set
+  rows = mycursor.fetchall()
+
+  # Print each row
+  for row in rows:
+    print(row)
