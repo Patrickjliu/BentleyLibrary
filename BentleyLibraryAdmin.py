@@ -12,47 +12,63 @@ from Credentials import db_config
 
 mydb = mysql.connector.connect(**db_config)
 
+
 def list_to_string(lst):
     if len(lst) == 1:
         return str(lst[0])
     else:
-        return ', '.join(map(str, lst))
+        return ", ".join(map(str, lst))
+
 
 def getTitle(ISBN):
-    response = requests.get(f"https://www.googleapis.com/books/v1/volumes?q=isbn:{ISBN}")
+    response = requests.get(
+        f"https://www.googleapis.com/books/v1/volumes?q=isbn:{ISBN}"
+    )
     data = response.json()
     title = data["items"][0]["volumeInfo"]["title"]
     return title
 
+
 def getAuthor(ISBN):
-  response = requests.get(f"https://www.googleapis.com/books/v1/volumes?q=isbn:{ISBN}")
-  data = response.json()
-  author = data["items"][0]["volumeInfo"]["authors"]
-  authorString = list_to_string(author)
-  return authorString
+    response = requests.get(
+        f"https://www.googleapis.com/books/v1/volumes?q=isbn:{ISBN}"
+    )
+    data = response.json()
+    author = data["items"][0]["volumeInfo"]["authors"]
+    authorString = list_to_string(author)
+    return authorString
+
 
 def getPub(ISBN):
-  response = requests.get(f"https://www.googleapis.com/books/v1/volumes?q=isbn:{ISBN}")
-  data = response.json()
-  pub = data["items"][0]["volumeInfo"]["publisher"]
-  return pub
+    response = requests.get(
+        f"https://www.googleapis.com/books/v1/volumes?q=isbn:{ISBN}"
+    )
+    data = response.json()
+    pub = data["items"][0]["volumeInfo"]["publisher"]
+    return pub
+
 
 def getPubDate(ISBN):
-  response = requests.get(f"https://www.googleapis.com/books/v1/volumes?q=isbn:{ISBN}")
-  data = response.json()
-  pub_date_str = data["items"][0]["volumeInfo"]["publishedDate"]
-  
-  # Attempt to parse the publication date string
-  try:
-    pub_date = datetime.datetime.strptime(pub_date_str, '%Y-%m-%d').date()
-  except ValueError:
-    # If parsing fails, use a default date of 1900-01-01
-    pub_date = datetime.date(1900, 1, 1)
-  
-  return str(pub_date)
+    response = requests.get(
+        f"https://www.googleapis.com/books/v1/volumes?q=isbn:{ISBN}"
+    )
+    data = response.json()
+    pub_date_str = data["items"][0]["volumeInfo"]["publishedDate"]
+
+    # Attempt to parse the publication date string
+    try:
+        pub_date = datetime.datetime.strptime(pub_date_str, "%Y-%m-%d").date()
+    except ValueError:
+        # If parsing fails, use a default date of 1900-01-01
+        pub_date = datetime.date(1900, 1, 1)
+
+    return str(pub_date)
+
 
 def getThumbnail(ISBN):
-    response = requests.get(f"https://www.googleapis.com/books/v1/volumes?q=isbn:{ISBN}")
+    response = requests.get(
+        f"https://www.googleapis.com/books/v1/volumes?q=isbn:{ISBN}"
+    )
     data = response.json()
     try:
         thumbnail = data["items"][0]["volumeInfo"]["imageLinks"]["thumbnail"]
@@ -62,11 +78,15 @@ def getThumbnail(ISBN):
     except:
         return Image.open("default-thumbnail.jpeg")
 
+
 def getDes(ISBN):
-  response = requests.get(f"https://www.googleapis.com/books/v1/volumes?q=isbn:{ISBN}")
-  data = response.json()
-  des = data["items"][0]["volumeInfo"]["description"]
-  return des
+    response = requests.get(
+        f"https://www.googleapis.com/books/v1/volumes?q=isbn:{ISBN}"
+    )
+    data = response.json()
+    des = data["items"][0]["volumeInfo"]["description"]
+    return des
+
 
 def add_book():
     isbn = isbn_entry.get()
@@ -78,9 +98,20 @@ def add_book():
     thumbnail = getThumbnail(isbn)
     thumbnail = thumbnail.resize((300, 450))
     thumbnail_image = ImageTk.PhotoImage(thumbnail)
-    query = ("INSERT INTO bookinventory (title, author, isbn, published_date, publisher, quantity, available_quantity, description)"
-                "VALUES (%s, %s, %s, %s, %s, %s, %s, %s)")
-    data = (title, author, isbn, publication_date, getPub(isbn), quantity, quantity, getDes(isbn))
+    query = (
+        "INSERT INTO bookinventory (title, author, isbn, published_date, publisher, quantity, available_quantity, description)"
+        "VALUES (%s, %s, %s, %s, %s, %s, %s, %s)"
+    )
+    data = (
+        title,
+        author,
+        isbn,
+        publication_date,
+        getPub(isbn),
+        quantity,
+        quantity,
+        getDes(isbn),
+    )
     cursor = mydb.cursor()
     cursor.execute(query, data)
     mydb.commit()
@@ -93,7 +124,9 @@ def add_book():
 
 def export_to_excel():
     # Prompt user to select a location to save the file
-    filename = filedialog.asksaveasfilename(defaultextension=".xlsx", filetypes=(("Excel Files", "*.xlsx"),))
+    filename = filedialog.asksaveasfilename(
+        defaultextension=".xlsx", filetypes=(("Excel Files", "*.xlsx"),)
+    )
 
     if filename:
         query = "SELECT * FROM bookinventory"
@@ -104,14 +137,15 @@ def export_to_excel():
         df_log = pd.read_sql(query, mydb)
 
         # Create a Pandas Excel writer using XlsxWriter as the engine
-        writer = pd.ExcelWriter(filename, engine='xlsxwriter')
+        writer = pd.ExcelWriter(filename, engine="xlsxwriter")
 
         # Write each dataframe to a different worksheet
-        df_bookinventory.to_excel(writer, sheet_name='Book Inventory', index=False)
-        df_log.to_excel(writer, sheet_name='Log', index=False)
+        df_bookinventory.to_excel(writer, sheet_name="Book Inventory", index=False)
+        df_log.to_excel(writer, sheet_name="Log", index=False)
 
         # Close the Pandas Excel writer and MySQL connection
         writer.save()
+
 
 # Define colors
 bg_color = "#FFFFFF"
@@ -136,7 +170,13 @@ logo_label = Label(header_frame, image=logo_photo, bg=primary_color)
 logo_label.pack(side=LEFT, padx=10)
 
 # Create the header title and subtitle
-title_label = Label(header_frame, text="Bentley Library", font=("Arial", 24, "bold"), fg=bg_color, bg=primary_color)
+title_label = Label(
+    header_frame,
+    text="Bentley Library",
+    font=("Arial", 24, "bold"),
+    fg=bg_color,
+    bg=primary_color,
+)
 title_label.pack(side=LEFT, padx=10)
 # subtitle_label = Label(header_frame, text="Explore, learn, and grow.", font=("Arial", 16), fg=bg_color, bg=primary_color)
 # subtitle_label.pack(side=LEFT, padx=10)
@@ -146,19 +186,32 @@ content_frame = Frame(root, bg=bg_color, padx=50, pady=50)
 content_frame.pack(fill=BOTH, expand=True)
 
 # Create the ISBN label and entry
-isbn_label = Label(content_frame, text="ISBN", font=("Arial", 14), fg=secondary_color, bg=bg_color)
+isbn_label = Label(
+    content_frame, text="ISBN", font=("Arial", 14), fg=secondary_color, bg=bg_color
+)
 isbn_label.pack()
 isbn_entry = Entry(content_frame, font=("Arial", 14))
 isbn_entry.pack()
 
 # Create the quantity label and entry
-quantity_label = Label(content_frame, text="Quantity", font=("Arial", 14), fg=secondary_color, bg=bg_color)
+quantity_label = Label(
+    content_frame, text="Quantity", font=("Arial", 14), fg=secondary_color, bg=bg_color
+)
 quantity_label.pack()
 quantity_entry = Entry(content_frame, font=("Arial", 14))
 quantity_entry.pack()
 
 # Create the add book button
-add_book_button = Button(content_frame, text="Add Book", font=("Arial", 14), bg='#000000', fg='#000000', padx=10, pady=5, command=add_book)
+add_book_button = Button(
+    content_frame,
+    text="Add Book",
+    font=("Arial", 14),
+    bg="#000000",
+    fg="#000000",
+    padx=10,
+    pady=5,
+    command=add_book,
+)
 add_book_button.pack(pady=20)
 
 # Create the thumbnail label
