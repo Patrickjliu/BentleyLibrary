@@ -129,8 +129,7 @@ def main():
     return name.capitalize(), lastname.capitalize(), email, year
 
   def cico():
-    global inInventory, ISBN, newavailable_quantity, id
-    nonlocal execute
+    nonlocal execute, inInventory, ISBN, newavailable_quantity, id
     name, lastname, email, year = "pat", "liu", "pliu25@bentleyschool.org", "2025" #login()
     name = name.capitalize()
     lastname = lastname.capitalize()
@@ -144,9 +143,10 @@ def main():
           print(f"Is '{getTitle(ISBN)}' the book? ")
           try:
             response = requests.get(getThumbnail(ISBN))
-            img = Image.open(io.BytesIO(response.content))
+            img_data = io.BytesIO(response.content)
+            img = Image.open(img_data)
             img.show()
-            time.sleep(2)
+            time.sleep(2)  # Display the image for 2 seconds
             img.close()
           
           except:
@@ -246,7 +246,7 @@ def main():
       
     # Add rows to the table
     for row in results:
-        table.add_row(row)
+      table.add_row(row)
     
     # Print the table
     print(table)
@@ -270,7 +270,6 @@ def main():
   else:
     print("Invalid option")
     main()
-    
   if execute:
     try:
       update = "UPDATE bookinventory SET available_quantity = %s WHERE id = %s"
