@@ -11,20 +11,24 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
 from pathlib import Path
-from Credentials import db_config
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+APP_DIRS = True
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "django-insecure-pe3apr$wl*=#v59fpa-n64qgu)8tw*pocg4mvt)8drmg!#tiu-"
+from decouple import config
+
+#config = AutoConfig()
+
+SECRET_KEY = config('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = config('DEBUG', cast = bool)
 
 ALLOWED_HOSTS = []
 
@@ -38,6 +42,7 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    'core',
 ]
 
 MIDDLEWARE = [
@@ -76,12 +81,8 @@ WSGI_APPLICATION = "BentleyLibrary.wsgi.application"
 
 DATABASES = {
     "default": {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / "db.sqlite3",
-        'USER': db_config['user'],
-        'PASSWORD': db_config['password'],
-        'HOST': db_config['host'],
-        'PORT': '3306',
+        "ENGINE": "django.db.backends.sqlite3",
+        "NAME": BASE_DIR / "db.sqlite3",
     }
 }
 
