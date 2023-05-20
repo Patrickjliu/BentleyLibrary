@@ -10,7 +10,7 @@ from prettytable import PrettyTable
 
 def main():
   mydb = mysql.connector.connect(**db_config)
-
+  
   name = ""
   lastname = ""
   email = ""
@@ -18,18 +18,12 @@ def main():
   ISBN = ""
   checkoutPeriod = 14
   inInventory = False
-  excute = False
+  execute = False
   newavailable_quantity = 0
   id = 0
 
   # Create a cursor object
   cursor = mydb.cursor()
-
-  # Prepare the SQL query to insert data
-  mycursor = mydb.cursor()
-
-  # Insert data into the table
-  sql = "INSERT INTO log (title, author, publisher, publication_year, borrower_first_name, borrower_last_name, borrowed_date) VALUES (%s, %s, %s, %s, %s, %s, %s)"
 
   def list_to_string(lst):
       if len(lst) == 1:
@@ -101,7 +95,7 @@ def main():
       print("Name must be more that one letter")
       return False
     return True
-
+  
   def login():
     print("Hello. Welcome to Bentley's Libary Check In and Check Out System!")
     
@@ -135,10 +129,11 @@ def main():
     return name.capitalize(), lastname.capitalize(), email, year
 
   def cico():
-    global inInventory, excute, ISBN, newavailable_quantity, id
-    name, lastname, email, year = login() #"pat", "liu", "pliu25@bentleyschool.org", "2025" 
+    global inInventory, ISBN, newavailable_quantity, id
+    nonlocal execute
+    name, lastname, email, year = "pat", "liu", "pliu25@bentleyschool.org", "2025" #login()
     name = name.capitalize()
-    lastname.capitalize()
+    lastname = lastname.capitalize()
     print(f"Welcome {name}!")
     
     while True:
@@ -167,6 +162,7 @@ def main():
       getaval = "SELECT id, quantity, available_quantity FROM bookinventory WHERE isbn = %s"
       cursor.execute(getaval, (ISBN,))
       quanitiyResult = cursor.fetchone()
+      cursor.fetchall()
       
       if not quanitiyResult:
         print("Book not found in inventory.")
@@ -191,16 +187,16 @@ def main():
             returned = "UPDATE log SET returned_date = %s, returned_time = %s WHERE borrower_email = %s AND isbn = %s AND returned_date IS NULL AND returned_time IS NULL ORDER BY borrowed_date DESC, borrowed_time DESC LIMIT 1"
             returnedvals = (current_date, current_time, email, ISBN)
             
-            try: 
-              mycursor.execute(returned, returnedvals) 
+            try:
+              cursor.execute(returned, returnedvals)
               newavailable_quantity += 1
               if newavailable_quantity > quantity:
                 newavailable_quantity = quantity
               print(f"{name} has checked in {getTitle(ISBN)} at {current_time}.")
               print("Thank you for checking in a book. Please place the book into the bin. ")
-              excute = True
-            except:
-              print("Value type error. Please try again. If this issue continues, please contact Patrick.")
+              execute = True
+            except mysql.connector.Error as error:
+              print("Error occurred while updating log:", error)
                 
           elif action == "co":
             if newavailable_quantity > 0:
@@ -208,27 +204,26 @@ def main():
             else:
               print("No copies available to check out")
               continue
-            
+
             # get current date as string
             current_date = datetime.date.today().strftime('%Y-%m-%d')
 
             # get current time as string
             current_time = datetime.datetime.now().strftime('%H:%M:%S')
-            
+
             borrow = "INSERT INTO log (book_id, title, author, publisher, publication_date, isbn, borrower_first_name, borrower_last_name, borrower_email, borrowed_date, borrowed_time) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
 
-            borrowValues = (id, getTitle(ISBN), getAuthor(ISBN), getPub(ISBN), getPubDate(ISBN), ISBN, name, lastname, email, current_date, current_time) 
+            borrowValues = (
+            id, getTitle(ISBN), getAuthor(ISBN), getPub(ISBN), getPubDate(ISBN), ISBN, name, lastname, email,
+            current_date, current_time)
 
-            try: 
-              mycursor.execute(borrow, borrowValues) 
-              
+            try:
+              cursor.execute(borrow, borrowValues)
               print(f"{name} has checked out {getTitle(ISBN)} at {current_time}")
               print("Thank you for checking out a book.")
-              excute = True
-            except:
-              print("Value type error. Please try again. If this issue continues, please contact Patrick.")
-            
-            
+              execute = True
+            except mysql.connector.Error as error:
+              print("Error occurred while inserting into log:", error)
               
           # If the user enters an invalid action, prompt them to try again
           else:
@@ -239,15 +234,14 @@ def main():
             exit_choice = input("Do you want to exit? Enter 'y' or 'n'. ").lower()
             if exit_choice == "y":
               return
-
       # Prompt the user if they want to continue or exit the program
       exit_choice = input("Do you want to exit? Enter 'y' or 'n'. ").lower()
       if exit_choice == "y":
         return
 
   def search(sStr):
-    mycursor.execute("SELECT title, author, isbn, published_date, publisher, available_quantity FROM bookinventory WHERE description LIKE %s OR author LIKE %s OR title LIKE %s OR publisher LIKE %s", ('%' + sStr + '%', '%' + sStr + '%', '%' + sStr + '%', '%' + sStr + '%'))
-    results = mycursor.fetchall()
+    cursor.execute("SELECT title, author, isbn, published_date, publisher, available_quantity FROM bookinventory WHERE description LIKE %s OR author LIKE %s OR title LIKE %s OR publisher LIKE %s", ('%' + sStr + '%', '%' + sStr + '%', '%' + sStr + '%', '%' + sStr + '%'))
+    results = cursor.fetchall()
     table = PrettyTable(['Title', 'Author', 'ISBN', 'Published Date', 'Publisher', 'Available Quantity'])
       
     # Add rows to the table
@@ -259,62 +253,40 @@ def main():
     input("Press Enter to continue.")
     main()  
 
-  def main():
+
+  os.system('clear')
+  menu = input("Please select from the following options.\n\n1. Search \n2. Check In & Check out\n3. Quit\n")
+  if menu == "1":
     os.system('clear')
-    menu = input("Please select from the following options.\n\n1. Search \n2. Check In & Check out\n3. Quit\n")
-    if menu == "1":
-      os.system('clear')
-      search(input("What would you like to search for?\n"))
-    elif menu == "2":
-      os.system('clear')
-      cico()
-    elif menu == "3":
-      os.system('clear')
-      print("\nThank you for coming! Please contact Patrick if you have any questions.")
-      time.sleep(20)
-      os.system('clear')
-    else:
-      print("Invalid option")
-      main()
-      
-  main()
-
-  if excute:
+    search(input("What would you like to search for?\n"))
+  elif menu == "2":
+    os.system('clear')
+    cico()
+  elif menu == "3":
+    os.system('clear')
+    print("\nThank you for coming! Please contact Patrick if you have any questions.")
+    time.sleep(20)
+    os.system('clear')
+  else:
+    print("Invalid option")
+    main()
+    
+  if execute:
     try:
-      # Commit the changes to the database
+      update = "UPDATE bookinventory SET available_quantity = %s WHERE id = %s"
+      cursor.execute(update, (newavailable_quantity, id))
+      print("Book inventory quantity updated successfully.")
       mydb.commit()
-
-      # check if the insertion was successful by verifying the number of affected rows
-      # if mycursor.rowcount > 0:
-      #   print("Insertion successful!")
-      # else:
-      #   print("Insertion failed. Please try again. If this issue continues, please contact Patrick.")
-      #   while True:
-      #     exit_choice = input("Do you want to exit? Enter 'y' or 'n'. ").lower()
-      #     if exit_choice == "y":
-      #       break
-      #     else:
-      #       main()
-
-      try:
-        update = "UPDATE bookinventory SET available_quantity = %s WHERE id = %s"
-        cursor.execute(update, (newavailable_quantity, id))
-        mydb.commit()
-      except:
-        print("Failed to update quanitiy in inventory. Please contact Patrick.")
-
-      # Close the connection
-      mydb.close()
-    except:
-      pass
+    except mysql.connector.Error as error:
+      print("Error occurred while updating bookinventory:", error)
 
   def printall(table):
     # Execute the SELECT query
     query = "SELECT * FROM %s"
-    mycursor.execute(query, (table,))
+    cursor.execute(query, (table,))
 
     # Fetch all rows from the result set
-    rows = mycursor.fetchall()
+    rows = cursor.fetchall()
 
     # Print each row
     for row in rows:
