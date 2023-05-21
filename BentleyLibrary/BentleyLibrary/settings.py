@@ -60,7 +60,9 @@ ROOT_URLCONF = "BentleyLibrary.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [],
+        "DIRS": [
+            '/Users/patrick/Coding/BentleyLibrary/BentleyLibrary/core/templates/core/',
+        ],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -79,12 +81,30 @@ WSGI_APPLICATION = "BentleyLibrary.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
+DB_NAME = config('DB_NAME')
+DB_USER = config('DB_USER')
+DB_PASSWORD = config('DB_PASSWORD')
+DB_HOST = config('DB_HOST')
+DB_PORT = config('DB_PORT')
+
 DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': DB_NAME,
+        'USER': DB_USER,
+        'PASSWORD': DB_PASSWORD,
+        'HOST': DB_HOST,
+        'PORT': DB_PORT,
     }
 }
+
+
+# DATABASES = {
+#     "default": {
+#         "ENGINE": "django.db.backends.sqlite3",
+#         "NAME": BASE_DIR / "db.sqlite3",
+#     }
+# }
 
 
 # Password validation

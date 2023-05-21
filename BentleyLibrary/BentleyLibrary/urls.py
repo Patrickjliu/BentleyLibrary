@@ -17,11 +17,13 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from core.views import index
-
+from core.views import search_results
 
 urlpatterns = [
     path('', index, name='index'),
     path("admin/", admin.site.urls),
+    path('search/', search_results, name='search_results'),
+
     # path('book_inventory/', book_inventory, name='book_inventory'),
     # path('my-url/', my_view, name='my_view'),
 
