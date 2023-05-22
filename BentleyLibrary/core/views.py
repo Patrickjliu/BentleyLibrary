@@ -23,6 +23,7 @@ def search_results(request):
     return render(request, 'search_results.html', context)
 
 
+
 # def search_results(request):
     
 #     books = Bookinventory.objects.all()
