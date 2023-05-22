@@ -24,13 +24,43 @@
         <hr class="border border-gray-300 mb-4">
         {% if results %}
             <h2 class="text-2xl font-bold mb-4">Found {{ results.count }} results for "{{ query }}"</h2>
-            <ul class="list-disc pl-8">
-                {% for book in results %}
-                    <li class="text-lg">{{ book.title }} by {{ book.author }}</li>
-                    <!-- <li class="text-lg">{{ book.author }}</li> -->
-                    <!-- Display other book information as desired -->
-                {% endfor %}
-            </ul>
+            <div class="container">
+                <div class="row mt-4">
+                    <div class="col">
+                        <table class="table">
+                            <thead class="thead-dark">
+                                <tr>
+                                    <th scope="col">Title</th>
+                                    <th scope="col">Author</th>
+                                    <th scope="col">ISBN</th>
+                                    <th scope="col">Publisher</th>
+                                    <th scope="col">Quantity</th>
+                                    <th scope="col">Available Quantity</th>
+                                    <th scope="col">Description</th>
+                                </tr>
+                            </thead>
+                            <tbody> 
+                                {% for book in results %}
+                                <tr>
+                                    <td class="py-2">{{ book.title }}</td>
+                                    <td class="py-2">{{ book.author }}</td>
+                                    <td class="py-2">{{ book.isbn }}</td>
+                                    <td class="py-2">{{ book.publisher }}</td>
+                                    <td class="py-2">{{ book.quantity }}</td>
+                                    <td class="py-2">{{ book.available_quantity }}</td>
+                                    <td class="py-2">{{ book.description }}</td>
+                                </tr>
+                                {% if not forloop.last %}
+                                <tr>
+                                    <td colspan="7" class="border-t border-gray-300"></td>
+                                </tr>
+                                {% endif %}
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
         {% else %}
             <p class="text-lg">No results found.</p>
         {% endif %}
