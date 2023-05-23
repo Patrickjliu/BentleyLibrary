@@ -14,23 +14,22 @@ def search_results(request):
         book_ids = results.values_list('id', flat=True)
         borrowed_books = Log.objects.filter(book_id__in=book_ids, returned_date__isnull=True)
         borrower_emails = borrowed_books.values_list('borrower_email', flat=True)
+        borrowed_book_ids = borrowed_books.values_list('book_id', flat=True)  # Get the borrowed book IDs
     else:
         results = Bookinventory.objects.all()
         borrowed_books = []
         borrower_emails = []
+        borrowed_book_ids = []
 
     context = {
         'results': results,
         'query': query,
         'borrowed_books': borrowed_books,
-        'borrower_emails': borrower_emails
+        'borrower_emails': borrower_emails,
+        'borrowed_book_ids': borrowed_book_ids  # Include the borrowed book IDs in the context
     }
 
     return render(request, 'search_results.html', context)
-
-
-
-
 
 # def search_results(request):
     

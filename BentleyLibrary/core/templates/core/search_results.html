@@ -36,7 +36,7 @@
                                     <th class="px-5 py-2" scope="col">Publisher</th>
                                     <th class="px-5 py-2" scope="col">Quantity</th>
                                     <th class="px-5 py-2" scope="col">Available Quantity</th>
-                                    <th class="px-5 py-2" scope="col">Borrower Email</th>
+                                    <th class="px-5 py-2" scope="col">Borrower Email(s)</th>
                                     <th class="px-5 py-2 rounded-tr-lg rounded-br-lg" scope="col">Description</th>
                                 </tr>
                             </thead>
@@ -51,27 +51,27 @@
                                         <td class="py-2 px-5">{{ book.available_quantity }}</td>
                                         <td class="py-2 px-5">
                                             {% if book.available_quantity < book.quantity %}
-                                              {% if book.id in borrowed_book_ids %}
-                                                {% for log_entry in borrowed_books %}
-                                                  {% if log_entry.book_id == book.id %}
-                                                    {% if log_entry.borrower_email %}
-                                                      {{ log_entry.borrower_email }}
-                                                    {% else %}
-                                                      N/A
-                                                    {% endif %}
-                                                  {% endif %}
-                                                {% endfor %}
-                                              {% else %}
-                                                N/A
-                                              {% endif %}
+                                                {% if book.id in borrowed_book_ids %}
+                                                    {% for log_entry in borrowed_books %}
+                                                        {% if log_entry.book_id == book.id %}
+                                                            {% if log_entry.borrower_email %}
+                                                                {{ log_entry.borrower_email }}<br>
+                                                            {% else %}
+                                                                N/A<br>
+                                                            {% endif %}
+                                                        {% endif %}
+                                                    {% endfor %}
+                                                {% else %}
+                                                    N/A<br>
+                                                {% endif %}
                                             {% else %}
-                                              N/A
+                                                N/A<br>
                                             {% endif %}
-                                          </td>
+                                        </td>
                                         <td class="py-2 px-5">{{ book.description }}</td>
                                     </tr>
                                 {% endfor %}
-                            </tbody>                                                                                                                                 
+                            </tbody>
                         </table>
                     </div>
                 </div>
