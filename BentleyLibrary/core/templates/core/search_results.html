@@ -24,58 +24,45 @@
         <hr class="border border-gray-300 mb-4">
         {% if results %}
             <h2 class="text-2xl font-bold mb-4">Found {{ results.count }} results for "{{ query }}"</h2>
-            <div class="container">
-                <div class="row mt-4">
-                    <div class="col">
-                        <table class="table">
-                            <thead class="bg-blue-500">
-                                <tr>
-                                    <th class="px-5 py-2 rounded-tl-lg rounded-bl-lg" scope="col">Title</th>
-                                    <th class="px-5 py-2" scope="col">Author</th>
-                                    <th class="px-5 py-2" scope="col">ISBN</th>
-                                    <th class="px-5 py-2" scope="col">Publisher</th>
-                                    <th class="px-5 py-2" scope="col">Quantity</th>
-                                    <th class="px-5 py-2" scope="col">Available Quantity</th>
-                                    <th class="px-5 py-2" scope="col">Borrower Email(s)</th>
-                                    <th class="px-5 py-2 rounded-tr-lg rounded-br-lg" scope="col">Description</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {% for book in results %}
-                                    <tr>
-                                        <td class="py-2 px-5">{{ book.title }}</td>
-                                        <td class="py-2 px-5">{{ book.author }}</td>
-                                        <td class="py-2 px-5">{{ book.isbn }}</td>
-                                        <td class="py-2 px-5">{{ book.publisher }}</td>
-                                        <td class="py-2 px-5">{{ book.quantity }}</td>
-                                        <td class="py-2 px-5">{{ book.available_quantity }}</td>
-                                        <td class="py-2 px-5">
-                                            {% if book.available_quantity < book.quantity %}
-                                                {% if book.id in borrowed_book_ids %}
-                                                    {% for log_entry in borrowed_books %}
-                                                        {% if log_entry.book_id == book.id %}
-                                                            {% if log_entry.borrower_email %}
-                                                                {{ log_entry.borrower_email }}<br>
-                                                            {% else %}
-                                                                N/A<br>
-                                                            {% endif %}
-                                                        {% endif %}
-                                                    {% endfor %}
-                                                {% else %}
-                                                    N/A<br>
-                                                {% endif %}
-                                            {% else %}
-                                                N/A<br>
-                                            {% endif %}
-                                        </td>
-                                        <td class="py-2 px-5">{{ book.description }}</td>
-                                    </tr>
-                                {% endfor %}
-                            </tbody>
-                        </table>
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                {% for book in results %}
+                <div class="bg-white rounded-lg shadow-md p-4 flex flex-col justify-between">
+                    <div>
+                      <h3 class="text-lg font-semibold mb-2">{{ book.title }}</h3>
+                      <p class="text-sm text-gray-600 mb-4">{{ book.author }}</p>
+                      <img src="{{ book.cover_image }}" alt="{{ book.title }}" class="w-full h-32 object-cover mb-4">
+                      <p class="text-sm text-gray-800 mb-2"><span class="font-bold">ISBN:</span> {{ book.isbn }}</p>
+                      <p class="text-sm text-gray-800 mb-2"><span class="font-bold">Publisher:</span> {{ book.publisher }}</p>
+                      <p class="text-sm text-gray-800 mb-2"><span class="font-bold">Quantity:</span> {{ book.quantity }}</p>
+                      <p class="text-sm text-gray-800 mb-2"><span class="font-bold">Available Quantity:</span> {{ book.available_quantity }}</p>
+                      <p class="text-sm text-gray-800 mb-2"><span class="font-bold">Borrower Email:</span>
+                        {% if book.available_quantity < book.quantity %}
+                          {% if book.id in borrowed_book_ids %}
+                            {% for log_entry in borrowed_books %}
+                              {% if log_entry.book_id == book.id %}
+                                {% if log_entry.borrower_email %}
+                                  {{ log_entry.borrower_email }}
+                                {% else %}
+                                  N/A
+                                {% endif %}
+                              {% endif %}
+                            {% endfor %}
+                          {% else %}
+                            N/A
+                          {% endif %}
+                        {% else %}
+                          N/A
+                        {% endif %}
+                      </p>
+                      <p class="text-sm text-gray-800 mb-2"><span class="font-bold">Description:</span> {{ book.description }}</p>
+                    </div>
+                    <div class="flex justify-end mt-4">
+                      <button class="px-4 py-2 mr-2 bg-blue-500 text-white font-semibold rounded hover:bg-blue-600">Check Out</button>
+                      <button class="px-4 py-2 bg-blue-500 text-white font-semibold rounded hover:bg-blue-600">Check In</button>
                     </div>
                 </div>
-            </div>
+                {% endfor %}
+            </div>              
         {% else %}
             <p class="text-lg">No results found.</p>
         {% endif %}
