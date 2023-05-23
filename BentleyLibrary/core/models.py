@@ -18,7 +18,7 @@ class Bookinventory(models.Model):
         return self.title
 
 class Log(models.Model):
-    book = models.ForeignKey(Bookinventory, models.DO_NOTHING)
+    book = models.ForeignKey(Bookinventory, on_delete=models.CASCADE)
     title = models.CharField(max_length=255)
     author = models.CharField(max_length=255)
     publisher = models.CharField(max_length=255)

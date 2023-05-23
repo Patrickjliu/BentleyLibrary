@@ -28,35 +28,50 @@
                 <div class="row mt-4">
                     <div class="col">
                         <table class="table">
-                            <thead class="thead-dark">
+                            <thead class="bg-blue-500">
                                 <tr>
-                                    <th scope="col">Title</th>
-                                    <th scope="col">Author</th>
-                                    <th scope="col">ISBN</th>
-                                    <th scope="col">Publisher</th>
-                                    <th scope="col">Quantity</th>
-                                    <th scope="col">Available Quantity</th>
-                                    <th scope="col">Description</th>
+                                    <th class="px-5 py-2 rounded-tl-lg rounded-bl-lg" scope="col">Title</th>
+                                    <th class="px-5 py-2" scope="col">Author</th>
+                                    <th class="px-5 py-2" scope="col">ISBN</th>
+                                    <th class="px-5 py-2" scope="col">Publisher</th>
+                                    <th class="px-5 py-2" scope="col">Quantity</th>
+                                    <th class="px-5 py-2" scope="col">Available Quantity</th>
+                                    <th class="px-5 py-2" scope="col">Borrower Email</th>
+                                    <th class="px-5 py-2 rounded-tr-lg rounded-br-lg" scope="col">Description</th>
                                 </tr>
                             </thead>
-                            <tbody> 
+                            <tbody>
                                 {% for book in results %}
-                                <tr>
-                                    <td class="py-2">{{ book.title }}</td>
-                                    <td class="py-2">{{ book.author }}</td>
-                                    <td class="py-2">{{ book.isbn }}</td>
-                                    <td class="py-2">{{ book.publisher }}</td>
-                                    <td class="py-2">{{ book.quantity }}</td>
-                                    <td class="py-2">{{ book.available_quantity }}</td>
-                                    <td class="py-2">{{ book.description }}</td>
-                                </tr>
-                                {% if not forloop.last %}
-                                <tr>
-                                    <td colspan="7" class="border-t border-gray-300"></td>
-                                </tr>
-                                {% endif %}
+                                    <tr>
+                                        <td class="py-2 px-5">{{ book.title }}</td>
+                                        <td class="py-2 px-5">{{ book.author }}</td>
+                                        <td class="py-2 px-5">{{ book.isbn }}</td>
+                                        <td class="py-2 px-5">{{ book.publisher }}</td>
+                                        <td class="py-2 px-5">{{ book.quantity }}</td>
+                                        <td class="py-2 px-5">{{ book.available_quantity }}</td>
+                                        <td class="py-2 px-5">
+                                            {% if book.available_quantity < book.quantity %}
+                                              {% if book.id in borrowed_book_ids %}
+                                                {% for log_entry in borrowed_books %}
+                                                  {% if log_entry.book_id == book.id %}
+                                                    {% if log_entry.borrower_email %}
+                                                      {{ log_entry.borrower_email }}
+                                                    {% else %}
+                                                      N/A
+                                                    {% endif %}
+                                                  {% endif %}
+                                                {% endfor %}
+                                              {% else %}
+                                                N/A
+                                              {% endif %}
+                                            {% else %}
+                                              N/A
+                                            {% endif %}
+                                          </td>
+                                        <td class="py-2 px-5">{{ book.description }}</td>
+                                    </tr>
                                 {% endfor %}
-                            </tbody>
+                            </tbody>                                                                                                                                 
                         </table>
                     </div>
                 </div>
