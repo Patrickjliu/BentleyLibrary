@@ -35,6 +35,9 @@ class Log(models.Model):
     class Meta:
         managed = False
         db_table = 'log'
+        
+    def __str__(self):
+        return self.title
 
 
 # from core.models import BookInventory

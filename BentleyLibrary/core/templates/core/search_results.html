@@ -7,11 +7,15 @@
 </head>
 <body class="bg-gray-100">
     <nav class="py-6 px-6 flex justify-between items-center border-b border-gray-200">
-        <a href="/" class="text-xl font-semibold">Bentley Library</a>
+        <a href="/" class="text-2xl font-semibold">Bentley Library</a>
         <div class="space-x-6">
-            <a href="#" class="text-lg font-semibold hover:text-gray-500">Cart</a>
-            <a href="#" class="px-6 py-3 text-lg font-semibold bg-blue-500 text-white rounded-xl hover:bg-teal-700">Signup</a>
-            <a href="#" class="px-6 py-3 text-lg font-semibold bg-gray-500 text-white rounded-xl hover:bg-gray-700">Login</a>
+            <nav class="py-6 px-6 flex justify-between items-center border-b border-gray-200">
+              <div class="space-x-6">
+                  <a href="#" class="text-lg font-semibold hover:text-gray-500">Cart</a>
+                  <a href="#" class="px-6 py-3 text-lg font-semibold bg-blue-500 text-white rounded-xl hover:bg-teal-700">Sign In</a>
+                  <a href="/resource.html" class="px-6 py-3 text-lg font-semibold bg-gray-500 text-white rounded-xl hover:bg-gray-700">Resources</a>
+              </div>
+          </nav>
         </div>
     </nav>
     
@@ -25,44 +29,22 @@
         {% if results %}
             <h2 class="text-2xl font-bold mb-4">Found {{ results.count }} results for "{{ query }}"</h2>
             <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                {% for book in results %}
-                <div class="bg-white rounded-lg shadow-md p-4 flex flex-col justify-between">
-                    <div>
-                      <h3 class="text-lg font-semibold mb-2">{{ book.title }}</h3>
-                      <p class="text-sm text-gray-600 mb-4">{{ book.author }}</p>
-                      <img src="{{ book.cover_image }}" alt="{{ book.title }}" class="w-full h-32 object-cover mb-4">
-                      <p class="text-sm text-gray-800 mb-2"><span class="font-bold">ISBN:</span> {{ book.isbn }}</p>
-                      <p class="text-sm text-gray-800 mb-2"><span class="font-bold">Publisher:</span> {{ book.publisher }}</p>
-                      <p class="text-sm text-gray-800 mb-2"><span class="font-bold">Quantity:</span> {{ book.quantity }}</p>
-                      <p class="text-sm text-gray-800 mb-2"><span class="font-bold">Available Quantity:</span> {{ book.available_quantity }}</p>
-                      <p class="text-sm text-gray-800 mb-2"><span class="font-bold">Borrower Email:</span>
-                        {% if book.available_quantity < book.quantity %}
-                          {% if book.id in borrowed_book_ids %}
-                            {% for log_entry in borrowed_books %}
-                              {% if log_entry.book_id == book.id %}
-                                {% if log_entry.borrower_email %}
-                                  {{ log_entry.borrower_email }}
-                                {% else %}
-                                  N/A
-                                {% endif %}
-                              {% endif %}
-                            {% endfor %}
-                          {% else %}
-                            N/A
-                          {% endif %}
-                        {% else %}
-                          N/A
-                        {% endif %}
-                      </p>
-                      <p class="text-sm text-gray-800 mb-2"><span class="font-bold">Description:</span> {{ book.description }}</p>
-                    </div>
-                    <div class="flex justify-end mt-4">
-                      <button class="px-4 py-2 mr-2 bg-blue-500 text-white font-semibold rounded hover:bg-blue-600">Check Out</button>
-                      <button class="px-4 py-2 bg-blue-500 text-white font-semibold rounded hover:bg-blue-600">Check In</button>
-                    </div>
-                </div>
-                {% endfor %}
-            </div>              
+              {% for book in results %}
+              <a href="{% url 'book_page' book.id %}" class="block mb-4">
+                  <div class="bg-white rounded-lg shadow-md p-4 flex flex-col justify-between">
+                      <div>
+                          <h3 class="text-lg font-semibold mb-2">{{ book.title }}</h3>
+                          <p class="text-sm text-gray-600 mb-4">{{ book.author }}</p>
+                          <img src="{{ book.cover_image }}" alt="{{ book.title }}" class="w-full h-32 object-cover mb-4">
+                          <p class="text-sm text-gray-800 mb-2"><span class="font-bold">ISBN:</span> {{ book.isbn }}</p>
+                          <p class="text-sm text-gray-800 mb-2"><span class="font-bold">Publisher:</span> {{ book.publisher }}</p>
+                          <p class="text-sm text-gray-800 mb-2"><span class="font-bold">Quantity:</span> {{ book.quantity }}</p>
+                          <p class="text-sm text-gray-800 mb-2"><span class="font-bold">Available Quantity:</span> {{ book.available_quantity }}</p>
+                      </div>
+                  </div>
+              </a>
+              {% endfor %}
+          </div>     
         {% else %}
             <p class="text-lg">No results found.</p>
         {% endif %}

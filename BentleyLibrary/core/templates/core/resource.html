@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+
+{% block title %}Resources{% endblock %}
+
+{% block content %}
+    <h1 class="text-3xl font-bold mb-8">Resources</h1>
+
+    {% for class in classes %}
+        <div class="mb-10">
+            <h2 class="text-2xl font-semibold">{{ class.name }}</h2>
+
+            <ul class="mt-4">
+                {% for resource in class.resources %}
+                    <li><a href="{{ resource.url }}">{{ resource.title }}</a></li>
+                {% endfor %}
+            </ul>
+        </div>
+    {% endfor %}
+
+    <div class="mt-16">
+        <p class="text-lg text-gray-800 mb-8">Access a wide range of resources to support your learning and research.</p>
+    </div>
+
+    <h2 class="text-2xl font-semibold mb-4">Online Databases</h2>
+    <ul class="list-disc pl-6 mb-8">
+        <li><a href="#" class="text-blue-500 hover:text-blue-700">Database 1</a> - Description of Database 1.</li>
+        <li><a href="#" class="text-blue-500 hover:text-blue-700">Database 2</a> - Description of Database 2.</li>
+        <li><a href="#" class="text-blue-500 hover:text-blue-700">Database 3</a> - Description of Database 3.</li>
+    </ul>
+
+    <h2 class="text-2xl font-semibold mb-4">E-Books</h2>
+    <ul class="list-disc pl-6 mb-8">
+        <li><a href="#" class="text-blue-500 hover:text-blue-700">E-Book 1</a> - Description of E-Book 1.</li>
+        <li><a href="#" class="text-blue-500 hover:text-blue-700">E-Book 2</a> - Description of E-Book 2.</li>
+        <li><a href="#" class="text-blue-500 hover:text-blue-700">E-Book 3</a> - Description of E-Book 3.</li>
+    </ul>
+
+    <h2 class="text-2xl font-semibold mb-4">Online Courses</h2>
+    <ul class="list-disc pl-6 mb-8">
+        <li><a href="#" class="text-blue-500 hover:text-blue-700">Course 1</a> - Description of Course 1.</li>
+        <li><a href="#" class="text-blue-500 hover:text-blue-700">Course 2</a> - Description of Course 2.</li>
+        <li><a href="#" class="text-blue-500 hover:text-blue-700">Course 3</a> - Description of Course 3.</li>
+    </ul>
+{% endblock %}

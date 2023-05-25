@@ -1,7 +1,44 @@
-{% extends 'core/base.html' %}
+{% extends 'base.html' %}
 
-{% block title %}Welcome{% endblock %}
+{% block title %}Home{% endblock %}
 
 {% block content %}
-<h1>Bentley Library Books</h1>
+    <h1 class="text-3xl font-bold mb-4">Welcome to Bentley Library</h1>
+    <p class="text-lg text-gray-800 mb-12">Scire Desidero. I Desire to Know.</p>
+
+    <div class="mb-16">
+        <h2 class="text-2xl font-semibold mb-2">Featured Topics</h2>
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+            <a href="https://www.nytimes.com/live/2023/05/24/us/desantis-2024-election-president" target="_blank" rel="noopener noreferrer" class="bg-white rounded-lg shadow-md p-4">
+                <h3 class="text-lg font-semibold mb-2">The Race for 2024</h3>
+                <p class="text-sm text-gray-600">See Ron Desantis' run for 2024 in the New York Times.</p>
+            </a>
+            <div class="bg-white rounded-lg shadow-md p-4">
+                <h3 class="text-lg font-semibold mb-2">ACSL</h3>
+                <p class="text-sm text-gray-600">See ACSL Resources and Practice for ACSL Finals.</p>
+            </div>
+            <div class="bg-white rounded-lg shadow-md p-4">
+                <h3 class="text-lg font-semibold mb-2">Topic 3</h3>
+                <p class="text-sm text-gray-600">Description of Topic 3.</p>
+            </div>
+            <div class="bg-white rounded-lg shadow-md p-4">
+                <h3 class="text-lg font-semibold mb-2">Topic 4</h3>
+                <p class="text-sm text-gray-600">Description of Topic 4.</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="my-16">
+        <h2 class="text-2xl font-semibold">Engage in Research Projects</h2>
+        <p class="text-lg text-gray-800 mb-4">At Bentley Library, we foster a culture of research and academic exploration. Each year, every student has the opportunity to engage in research projects that deepen their understanding and develop critical thinking skills. Our vast collection of resources and dedicated faculty mentors support students throughout their research journey, ensuring a rich and transformative learning experience.</p>
+    </div>
+
+    <div class="my-16">
+        <h2 class="text-2xl font-semibold">Explore the Library</h2>
+        <p class="text-lg text-gray-800 mb-4">Search for books, articles, and resources to enhance your knowledge and skills.</p>
+        <form action="{% url 'search_results' %}" method="GET" class="flex mb-4">
+            <input type="text" name="q" placeholder="Search" class="w-64 px-4 py-2 border border-gray-300 rounded-l focus:outline-none focus:ring-2 focus:ring-blue-400">
+            <button type="submit" class="px-4 py-2 bg-blue-500 text-white font-semibold rounded-r hover:bg-blue-700">Search</button>
+        </form>
+    </div>
 {% endblock %}
