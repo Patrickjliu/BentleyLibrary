@@ -12,6 +12,10 @@ def resource_view(request):
                     'url': 'https://www.loc.gov/programs/teachers/getting-started-with-primary-sources/citing/chicago/',
                 },
                 # Add more resources for Class 1
+                {
+                    'title': 'JSTOR',
+                    'url': 'https://www.jstor.org/',
+                },
             ],
         },
         {
@@ -22,6 +26,10 @@ def resource_view(request):
                     'url': 'https://www.loc.gov/programs/teachers/getting-started-with-primary-sources/citing/chicago/',
                 },
                 # Add more resources for Class 2
+                {
+                    'title': 'JSTOR',
+                    'url': 'https://www.jstor.org/',
+                },
             ],
         },
         # Add more classes as needed
