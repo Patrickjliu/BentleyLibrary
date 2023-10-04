@@ -9,6 +9,7 @@ class Bookinventory(models.Model):
     quantity = models.IntegerField()
     available_quantity = models.IntegerField()
     description = models.TextField(blank=True, null=True)
+    image_url = models.CharField(max_length=255)
 
     class Meta:
         managed = False

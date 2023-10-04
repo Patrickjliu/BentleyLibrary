@@ -3,6 +3,12 @@
 {% block title %}Home{% endblock %}
 
 {% block content %}
+    {% if success_messages %}
+    <div class="alert alert-success mb-4">
+        <strong>Success:</strong> {% for message in success_messages %} {{ message }} {% endfor %}
+    </div>
+    {% endif %}
+
     <h1 class="text-3xl font-bold mb-4">Welcome to Bentley Library</h1>
     <p class="text-lg text-gray-800 mb-12">Scire Desidero. I Desire to Know.</p>
 

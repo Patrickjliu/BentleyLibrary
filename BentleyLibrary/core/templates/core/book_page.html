@@ -1,36 +1,13 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="UTF-8">
-    <title>Search Results</title>
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-</head>
-<body class="bg-gray-100">
-    <nav class="py-6 px-6 flex justify-between items-center border-b border-gray-200">
-        <a href="/" class="text-2xl font-semibold">Bentley Library</a>
-        <div class="space-x-6">
-            <nav class="py-6 px-6 flex justify-between items-center border-b border-gray-200">
-              <div class="space-x-6">
-                  <a href="#" class="text-lg font-semibold hover:text-gray-500">Cart</a>
-                  <a href="#" class="px-6 py-3 text-lg font-semibold bg-blue-500 text-white rounded-xl hover:bg-teal-700">Sign In</a>
-                  <a href="/resource.html" class="px-6 py-3 text-lg font-semibold bg-gray-500 text-white rounded-xl hover:bg-gray-700">Resources</a>
-              </div>
-          </nav>
-        </div>
-    </nav>
-    
-    <div class="container mx-auto px-4 py-8">
-        <h1 class="text-3xl font-bold mb-4">Search</h1>
-        <form method="GET" action="{% url 'search_results' %}" class="flex mb-4">
-            <input type="text" name="q" value="{{ query }}" class="w-64 px-4 py-2 border border-gray-300 rounded-l focus:outline-none focus:ring-2 focus:ring-blue-400">
-            <button type="submit" class="px-4 py-2 bg-blue-500 text-white font-semibold rounded-r hover:bg-blue-600">Search</button>
-        </form>
-    </div>
+{% extends 'base.html' %}
+
+{% block title %}Search Results{% endblock %}
+
+{% block content %}
 
     <div class="container mx-auto px-4 py-8">
         <div class="grid grid-cols-4 gap-8">
             <div class="col-span-1">
-                <img src="{{ book.image_url }}" alt="Book Cover" class="max-w-full">
+                <img src="{{ book.image_url }}" alt="Book Cover" class="w-full object-cover mb-4">
             </div>
             <div class="col-span-2">
                 <h2 class="text-3xl font-bold mb-4"><span class="font-bold">Title:</span> {{ book.title }}</h2>
@@ -42,8 +19,8 @@
             <div class="col-span-1">
                 <div class="bg-gray-200 rounded-lg p-4">
                     <p class="text-lg">Available Quantity: {{ book.available_quantity }}</p>
-                    <p class="text-lg">Quantity: {{ book.quantity }}</p>
-                    <p class="text-lg">Borrower Emails:</p>
+                    <p class="text-lg mt-2">Quantity: {{ book.quantity }}</p>
+                    <p class="text-lg mt-2">Borrower Emails:</p>
                     <ul>
                         {% if book.available_quantity < book.quantity %}
                             {% if book.id in borrowed_book_ids %}
@@ -59,15 +36,12 @@
                             {% else %}
                                 <li>N/A</li>
                             {% endif %}
-                        {% else %}
-                            {% for email in book.borrower_emails %}
-                                <li>{{ email }}</li>
-                            {% endfor %}
                         {% endif %}
                     </ul>
-                    <div class="flex justify-between mt-4">
-                        <button class="px-4 py-2 bg-blue-500 text-white font-semibold rounded-lg hover:bg-blue-600">Check Out</button>
-                        <button class="px-4 py-2 bg-blue-500 text-white font-semibold rounded-lg hover:bg-blue-600">Check In</button>
+                    <div class="flex justify-between mt-6">
+                        <a href="{% url 'checkout' book.isbn %}" class="px-4 py-2 bg-blue-500 text-white font-semibold rounded-lg hover:bg-blue-600">Check Out</a>
+
+                        <a href="{% url 'checkin' %}" class="px-4 py-2 bg-blue-500 text-white font-semibold rounded-lg hover:bg-blue-600">Check In</a>
                     </div>
                 </div>
             </div>
@@ -75,3 +49,4 @@
     </div>
 </body>
 </html>
+{% endblock %}

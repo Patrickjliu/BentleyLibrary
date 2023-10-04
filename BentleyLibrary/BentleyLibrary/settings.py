@@ -21,14 +21,16 @@ APP_DIRS = True
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-from decouple import config
+# from decouple import config
 
 #config = AutoConfig()
 
-SECRET_KEY = config('SECRET_KEY')
+# SECRET_KEY = config('SECRET_KEY')
+SECRET_KEY = "django-insecure-up4!ac-sd@lbwugyd!!nhv$!!6e#v^0)jaqfa_6)9r0)yh%ky_"
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = config('DEBUG', cast = bool)
+# DEBUG = config('DEBUG', cast = bool)
+DEBUG = True
 
 ALLOWED_HOSTS = []
 
@@ -61,7 +63,7 @@ TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
         "DIRS": [
-            '/Users/patrick/Coding/BentleyLibrary/BentleyLibrary/core/templates/core/',
+            '/Users/patri/OneDrive/Desktop/Coding/BentleyLibrary/BentleyLibrary/core/templates/core/',
         ],
         "APP_DIRS": True,
         "OPTIONS": {
@@ -81,11 +83,16 @@ WSGI_APPLICATION = "BentleyLibrary.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
-DB_NAME = config('DB_NAME')
-DB_USER = config('DB_USER')
-DB_PASSWORD = config('DB_PASSWORD')
-DB_HOST = config('DB_HOST')
-DB_PORT = config('DB_PORT')
+# DB_NAME = config('DB_NAME')
+# DB_USER = config('DB_USER')
+# DB_PASSWORD = config('DB_PASSWORD')
+# DB_HOST = config('DB_HOST')
+# DB_PORT = config('DB_PORT')
+DB_NAME = 'BentleyLibrary'
+DB_USER = 'root'
+DB_PASSWORD = 'Bentley2023'
+DB_HOST = 'localhost'
+DB_PORT = '3306'
 
 DATABASES = {
     'default': {

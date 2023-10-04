@@ -1,0 +1,122 @@
+{% extends 'base.html' %}
+
+{% block title %}Advanced Search Results{% endblock %}
+
+{% block content %}
+<div class="container mx-auto mt-10">
+    <h1 class="text-3xl font-semibold mb-10">Advanced Search</h1>
+    <form class="w-full max-w-lg" action="{% url 'advanced_search_results' %}" method="GET">
+        <div class="mb-6">
+            <label for="search-type" class="block text-gray-700 font-bold mb-2">Search for:</label>
+            <select id="search-type" name="search_type" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400">
+                <option value="everything">Everything</option>
+                <option value="catalog">Library Catalog</option>
+                <option value="articles">Articles</option>
+                <option value="reserves">Course Reserves</option>
+            </select>
+        </div>
+
+        <div id="search-criteria">
+            <!-- Initial criteria field -->
+            <div class="grid grid-cols-6 gap-2 criteria">
+                <div class="col-span-1">
+                    <select name="field[]" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400">
+                        <option value="any_field">Any field</option>
+                        <option value="title">Title</option>
+                        <option value="author">Author</option>
+                        <option value="publisher">Publisher</option>
+                        <option value="ISBN">ISBN</option>
+                    </select>
+                </div>
+                <div class="col-span-1">
+                    <select name="operator[]" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400">
+                        <option value="contains">contains</option>
+                        <option value="does_not_contain">does not contain</option>
+                    </select>
+                </div>
+                <div class="col-span-2">
+                    <input type="text" name="search_term[]" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400">
+                </div>
+                <div class="col-span-1">
+                    <select name="logical_operator[]" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400">
+                        <option value="AND">AND</option>
+                        <option value="OR">OR</option>
+                        <option value="NOT">NOT</option>
+                    </select>
+                </div>
+                <div class="col-span-1 flex items-end mb-2">
+                    <button type="button" class="px-3 py-2 bg-red-500 text-white font-semibold rounded-lg hover:bg-red-700 remove-criteria">Remove</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="mt-2">
+            <button type="button" class="px-4 py-2 bg-green-500 text-white font-semibold rounded-lg hover:bg-green-700 add-criteria">Add Criteria</button>
+        </div>
+
+        <div class="mb-6">
+            <label class="block text-gray-700 font-bold mb-2 mt-8">Date Range:</label>
+            <div class="grid grid-cols-1 gap-2">
+                <div>
+                    <label for="start-date" class="block text-gray-700 font-bold mb-2">Start Date:</label>
+                    <div class="grid grid-cols-3 gap-2">
+                        <input type="text" id="start-day" name="start_day" placeholder="Day" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400">
+                        <input type="text" id="start-month" name="start_month" placeholder="Month" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400">
+                        <input type="text" id="start-year" name="start_year" placeholder="Year" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400">
+                    </div>
+                </div>
+                <div>
+                    <label for="end-date" class="block text-gray-700 font-bold mb-2">End Date:</label>
+                    <div class="grid grid-cols-3 gap-2">
+                        <input type="text" id="end-day" name="end_day" placeholder="Day" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400">
+                        <input type="text" id="end-month" name="end_month" placeholder="Month" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400">
+                        <input type="text" id="end-year" name="end_year" placeholder="Year" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="mb-6 mt-10">
+            <button type="submit" class="px-4 py-2 bg-blue-500 text-white font-semibold rounded-lg hover:bg-blue-700">Search</button>
+        </div>
+    </form>
+</div>
+
+<script>
+    // Add criteria
+    document.querySelector('.add-criteria').addEventListener('click', function () {
+        const criteria = document.querySelector('.criteria:last-child');
+        const newCriteria = criteria.cloneNode(true);
+        criteria.after(newCriteria);
+        newCriteria.querySelector('.remove-criteria').addEventListener('click', function () {
+            this.closest('.criteria').remove();
+        });
+    });
+</script>
+
+    <h1 class="text-3xl font-bold mb-4">Search Results</h1>
+                {% if results %}
+                    <h2 class="text-2xl font-bold mb-4">Found {{ results.count }} results for "{{ query }}"</h2>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                      {% for book in results %}
+                      <a href="{% url 'book_page' book.id %}" class="block mb-4">
+                          <div class="bg-white rounded-lg shadow-md p-4 flex flex-col justify-between">
+                              <div>
+                                  <h3 class="text-lg font-semibold mb-2">{{ book.title }}</h3>
+                                  <p class="text-sm text-gray-600 mb-2">{{ book.author }}</p>
+                                  <img src="{{ book.image_url }}" alt="{{ book.title }}" class="max-w-full mb-2"> <!-- Added margin-bottom -->
+                                  <p class="text-sm text-gray-800 mb-1"><span class="font-bold">ISBN:</span> {{ book.isbn }}</p> <!-- Adjusted margin-bottom -->
+                                  <p class="text-sm text-gray-800 mb-1"><span class="font-bold">Publisher:</span> {{ book.publisher }}</p>
+                                  <p class="text-sm text-gray-800 mb-1"><span class="font-bold">Quantity:</span> {{ book.quantity }}</p>
+                                  <p class="text-sm text-gray-800 mb-1"><span class="font-bold">Available Quantity:</span> {{ book.available_quantity }}</p>
+                              </div>
+                          </div>
+                      </a>
+                      {% endfor %}
+                  </div>     
+                {% else %}
+                    <p class="text-lg">No results found.</p>
+                {% endif %}
+</body>
+</html>
+{% endblock %}

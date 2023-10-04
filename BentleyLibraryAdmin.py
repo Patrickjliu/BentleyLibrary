@@ -87,6 +87,14 @@ def getDes(ISBN):
     des = data["items"][0]["volumeInfo"]["description"]
     return des
 
+def getImg(ISBN):
+    response = requests.get(
+        f"https://www.googleapis.com/books/v1/volumes?q=isbn:{ISBN}"
+    )
+    data = response.json()
+    img = data["items"][0]["volumeInfo"]["imageLinks"]["thumbnail"]
+    return img
+
 
 def add_book():
     isbn = isbn_entry.get()
@@ -99,8 +107,8 @@ def add_book():
     thumbnail = thumbnail.resize((300, 450))
     thumbnail_image = ImageTk.PhotoImage(thumbnail)
     query = (
-        "INSERT INTO bookinventory (title, author, isbn, published_date, publisher, quantity, available_quantity, description)"
-        "VALUES (%s, %s, %s, %s, %s, %s, %s, %s)"
+        "INSERT INTO bookinventory (title, author, isbn, published_date, publisher, quantity, available_quantity, description, image_url)"
+        "VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)"
     )
     data = (
         title,
@@ -111,6 +119,7 @@ def add_book():
         quantity,
         quantity,
         getDes(isbn),
+        getImg(isbn),
     )
     cursor = mydb.cursor()
     cursor.execute(query, data)
@@ -206,8 +215,8 @@ add_book_button = Button(
     content_frame,
     text="Add Book",
     font=("Arial", 14),
-    bg="#000000",
-    fg="#000000",
+    bg=bg_color,
+    fg='#000000',
     padx=10,
     pady=5,
     command=add_book,

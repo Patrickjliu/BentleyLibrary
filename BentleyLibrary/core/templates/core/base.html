@@ -10,17 +10,18 @@
 <body class="bg-gray-100">
     <nav class="py-10 px-6 flex justify-between items-center border-b border-gray-200">
         <a href="/" class="text-2xl font-semibold">Bentley Library</a>
-        <form action="{% url 'search_results' %}" method="GET" class="flex items-center">
-            <input type="text" name="q" placeholder="Search" class="w-64 px-4 py-2 border border-gray-300 rounded-l focus:outline-none focus:ring-2 focus:ring-blue-400">
+        <form action="{% url 'search_results' %}" method="GET" class="flex items-center space-x-2">
+            <input type="text" name="q" placeholder="Search" class="w-64 px-4 py-2 border border-gray-300 rounded-l focus:outline-none focus:ring-2 focus:ring-blue-400" value="{{ query }}">
             <button type="submit" class="px-4 py-2 bg-blue-500 text-white font-semibold rounded-r hover:bg-blue-700">Search</button>
-        </form>
+        </form>        
         <div class="space-x-6">
-            <a href="#" class="text-lg font-semibold hover:text-gray-500">Cart</a>
-            <a href="#" class="px-6 py-3 text-lg font-semibold bg-blue-500 text-white rounded-xl hover:bg-teal-700">Sign In</a>
-            <a href="/resource.html" class="px-6 py-3 text-lg font-semibold bg-gray-500 text-white rounded-xl hover:bg-gray-700">Resources</a>
+            <a href="{% url 'advanced_search' %}" class="text-lg font-semibold hover:text-gray-500">Advanced Search</a>
+            <a href="{% url 'checkin' %}" class="text-lg font-semibold hover:text-gray-500">Check In</a>
+            <a href="{% url 'checkin' %}" class="text-lg font-semibold hover:text-gray-500">Check Out</a>
+            <a href="/resource.html" class="text-lg font-semibold hover:text-gray-500">Resources</a>
         </div>
     </nav>
-    <div class="container mx-auto px-4 py-8">   
+    <div class="container mx-auto px-4 py-8">
         {% block content %}
         {% endblock %}
     </div>

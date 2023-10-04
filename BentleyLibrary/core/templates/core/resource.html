@@ -5,40 +5,134 @@
 {% block content %}
     <h1 class="text-3xl font-bold mb-8">Resources</h1>
 
-    {% for class in classes %}
-        <div class="mb-10">
-            <h2 class="text-2xl font-semibold">{{ class.name }}</h2>
+    <!-- JavaScript function to toggle course resources -->
+    <script>
+        function toggleResources(courseId) {
+            var resources = document.getElementById(courseId + "-resources");
+            var button = document.getElementById(courseId + "-button");
 
-            <ul class="mt-4">
-                {% for resource in class.resources %}
-                    <li><a href="{{ resource.url }}">{{ resource.title }}</a></li>
-                {% endfor %}
+            if (resources.style.display === "none" || resources.style.display === "") {
+                resources.style.display = "block";
+                button.innerHTML = "▲";
+            } else {
+                resources.style.display = "none";
+                button.innerHTML = "▼";
+            }
+        }
+    </script>
+
+    <!-- Course sections with toggle buttons -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <!-- MWH Course -->
+        <div class="bg-white rounded-lg shadow-xl p-6">
+            <h2 class="text-2xl font-semibold text-black-600 flex justify-between items-center">
+                MWH
+                <button id="mwh-button" onclick="toggleResources('mwh')" class="text-blue-500 hover:text-blue-700 bg-blue-100 hover:bg-blue-200 py-2 px-4 rounded-full transition duration-300">▼</button>
+            </h2>
+            <ul id="mwh-resources" style="display: none;" class="list-disc list-inside mt-4">
+                <li class="mb-2">
+                    <a href="https://www.loc.gov/programs/teachers/getting-started-with-primary-sources/citing/chicago/" class="text-blue-500 hover:text-blue-700">Citing: Chicago Style</a>
+                    <p class="text-gray-600">Learn how to cite sources in Chicago Style.</p>
+                </li>
+                <li class="mb-2">
+                    <a href="https://www.jstor.org/" class="text-blue-500 hover:text-blue-700">JSTOR</a>
+                    <p class="text-gray-600">A multi-disciplinary database with scholarly journals, books, and reports.</p>
+                </li>
             </ul>
         </div>
-    {% endfor %}
 
-    <div class="mt-16">
+        <!-- History Seminar: Colonialism -->
+        <div class="bg-white rounded-lg shadow-xl p-6">
+            <h2 class="text-2xl font-semibold text-black-600 flex justify-between items-center">
+                History Seminar: Colonialism
+                <button id="colonialism-button" onclick="toggleResources('colonialism')" class="text-blue-500 hover:text-blue-700 bg-blue-100 hover:bg-blue-200 py-2 px-4 rounded-full transition duration-300">▼</button>
+            </h2>
+            <ul id="colonialism-resources" style="display: none;" class="list-disc list-inside mt-4">
+                <li class="mb-2">
+                    <a href="https://www.loc.gov/programs/teachers/getting-started-with-primary-sources/citing/chicago/" class="text-blue-500 hover:text-blue-700">Citing: Chicago Style</a>
+                    <p class="text-gray-600">Learn how to cite sources in Chicago Style.</p>
+                </li>
+                <li class="mb-2">
+                    <a href="https://www.jstor.org/" class="text-blue-500 hover:text-blue-700">JSTOR</a>
+                    <p class="text-gray-600">A multi-disciplinary database with scholarly journals, books, and reports.</p>
+                </li>
+                <li class="mb-2">
+                    <a href="https://www.ebsco.com/products/research-databases/academic-search-complete" class="text-blue-500 hover:text-blue-700">Academic Search Complete</a>
+                    <p class="text-gray-600">Access a wide range of resources to support your learning and research.</p>
+                </li>
+                <li class="mb-2">
+                    <a href="https://www.britannica.com/" class="text-blue-500 hover:text-blue-700">Britannica</a>
+                    <p class="text-gray-600">A comprehensive encyclopedia with reliable information on various topics.</p>
+                </li>
+            </ul>
+        </div>
+
+        <!-- History Seminar: Another Topic -->
+        <div class="bg-white rounded-lg shadow-xl p-6">
+            <h2 class="text-2xl font-semibold text-black-600 flex justify-between items-center">
+                History Seminar: Another Topic
+                <button id="another-topic-button" onclick="toggleResources('another-topic')" class="text-blue-500 hover:text-blue-700 bg-blue-100 hover:bg-blue-200 py-2 px-4 rounded-full transition duration-300">▼</button>
+            </h2>
+            <ul id="another-topic-resources" style="display: none;" class="list-disc list-inside mt-4">
+                <!-- Add resources for this course section -->
+            </ul>
+        </div>
+
+        <!-- US History Course -->
+        <div class="bg-white rounded-lg shadow-xl p-6">
+            <h2 class="text-2xl font-semibold text-black-600 flex justify-between items-center">
+                US History
+                <button id="us-history-button" onclick="toggleResources('us-history')" class="text-blue-500 hover:text-blue-700 bg-blue-100 hover:bg-blue-200 py-2 px-4 rounded-full transition duration-300">▼</button>
+            </h2>
+            <ul id="us-history-resources" style="display: none;" class="list-disc list-inside mt-4">
+                <!-- Add resources for this course section -->
+            </ul>
+        </div>
+    </div>
+
+    <h2 class="text-2xl font-semibold text-black-600 mt-8">Library Resources</h2>
+    <div class="mt-4">
         <p class="text-lg text-gray-800 mb-8">Access a wide range of resources to support your learning and research.</p>
     </div>
 
-    <h2 class="text-2xl font-semibold mb-4">Online Databases</h2>
+    <h2 class="text-2xl font-semibold mb-8">Online Databases</h2>
     <ul class="list-disc pl-6 mb-8">
-        <li><a href="#" class="text-blue-500 hover:text-blue-700">Database 1</a> - Description of Database 1.</li>
-        <li><a href="#" class="text-blue-500 hover:text-blue-700">Database 2</a> - Description of Database 2.</li>
-        <li><a href="#" class="text-blue-500 hover:text-blue-700">Database 3</a> - Description of Database 3.</li>
+        <li>
+            <a href="https://www.ebsco.com/products/research-databases/academic-search-complete" class="text-blue-500 hover:text-blue-700">Academic Search Complete</a>
+            - A multi-disciplinary database of scholarly and general interest journals, books, and reports. If you're looking for background info on a topic, here is a great place to start!
+        </li>
+        <li>
+            <a href="https://www.jstor.org/" class="text-blue-500 hover:text-blue-700">JSTOR</a>
+            - A multi-disciplinary database that covers over 50 different disciplines/subject areas and contains over 1000 academic journal articles, photographs, editorials, and reviews.
+        </li>
+        <li>
+            <a href="https://www.nytimes.com/" class="text-blue-500 hover:text-blue-700">New York Times</a>
+            - Use this link if you've already created an account/redeemed your school pass.
+        </li>
+        <li>
+            <a href="https://www.proquest.com/" class="text-blue-500 hover:text-blue-700">ProQuest Central</a>
+            - ProQuest gives us access to several academic databases, including books and journal articles. It covers many subjects, including history + political science, literature, and science.
+        </li>
+        <li>
+            <a href="https://www.washingtonpost.com/" class="text-blue-500 hover:text-blue-700">Washington Post</a>
+            - Access to the daily edition of the Washington Post. You must be on campus to use this resource.
+        </li>
     </ul>
 
-    <h2 class="text-2xl font-semibold mb-4">E-Books</h2>
+    <h2 class="text-2xl font-semibold mb-8">Research Guides</h2>
     <ul class="list-disc pl-6 mb-8">
-        <li><a href="#" class="text-blue-500 hover:text-blue-700">E-Book 1</a> - Description of E-Book 1.</li>
-        <li><a href="#" class="text-blue-500 hover:text-blue-700">E-Book 2</a> - Description of E-Book 2.</li>
-        <li><a href="#" class="text-blue-500 hover:text-blue-700">E-Book 3</a> - Description of E-Book 3.</li>
+        <li>
+            <a href="https://www.example.com/research-guide-1" class="text-blue-500 hover:text-blue-700">Research Guide 1</a>
+            - BROWSE All Guides. This guide provides comprehensive resources for various subjects.
+        </li>
+        <li>
+            <a href="https://www.example.com/research-guide-2" class="text-blue-500 hover:text-blue-700">Research Guide 2</a>
+            - Research Guides by Subject. Explore subject-specific research guides for in-depth information.
+        </li>
+        <li>
+            <a href="https://www.example.com/cite-a-source" class="text-blue-500 hover:text-blue-700">Cite a Source</a>
+            - Learn how to properly cite sources in your academic work.
+        </li>
     </ul>
-
-    <h2 class="text-2xl font-semibold mb-4">Online Courses</h2>
-    <ul class="list-disc pl-6 mb-8">
-        <li><a href="#" class="text-blue-500 hover:text-blue-700">Course 1</a> - Description of Course 1.</li>
-        <li><a href="#" class="text-blue-500 hover:text-blue-700">Course 2</a> - Description of Course 2.</li>
-        <li><a href="#" class="text-blue-500 hover:text-blue-700">Course 3</a> - Description of Course 3.</li>
-    </ul>
+</div>
 {% endblock %}
